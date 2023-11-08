@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Emp 관리</h1>
+      <hr />
+      <table>
+        <thead>
+          <tr>
+            <td>employeeId</td>
+            <td>firstName</td>
+            <td>lastName</td>
+            <td>email</td>
+            <td>hireDate</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(emp, index) in empList" v-bind:key="index" @click="detail(emp.employeeId)">
+            <td>{{emp.employeeId}}</td>
+            <td>{{emp.firstName}}</td>
+            <td>{{emp.lastName}}</td>
+            <td>{{emp.email}}</td>
+            <td>{{emp.hireDate}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const empList = ref([]);
+
+          const list = async function () {
+            try {
+              let response = await fetch("/emps");
+              let data = await response.json();
+              empList.value = data;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const detail = function (employeeId) {
+            alert(employeeId);
+          };
+
+          list();
+
+          return {
+            empList,
+            detail,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

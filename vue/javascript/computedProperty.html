@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 변수의 값을 property로 설정
+        let name = 'gender';
+        let value = 'M';
+        let obj = {
+            [name]: value   // 'gender' : "M"
+        }
+        console.log(obj);
+
+        // function return 값을 property로 설정
+        function myProp() {
+            return 'gender';
+        }
+        function myValue() {
+            return 'F';
+        }
+        let obj2 = {
+            [myProp()]: myValue()
+        }
+        console.log(obj2);
+    </script>
+</body>
+</html>

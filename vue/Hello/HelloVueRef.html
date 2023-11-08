@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{text}}{{text}}{{text}}{{text}}
+        <button @click="changeText">변경</button>
+    </div>
+
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        console.log(Vue);
+        // Vue Object가 가진 function 중 createApp()를 가져온다.
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+                const text = ref('Hello Vue');
+
+                const changeText = function() {
+                    text.value = "World!";
+                }
+
+                return {
+                    text, changeText
+                }
+            }
+        }).mount("#app");
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div style="color: green">inline style</div>
+
+      <!-- inline style을 위한 green을 변수화 -->
+      <div :style="{color: myColor}">inline style</div>
+      <div :style="{'background-color': myBgColor}">inline style</div>
+      <div :style="{backgroundColor: myBgColor}">inline style</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const myColor = ref("blue");
+          const myBgColor = ref("gray");
+
+          return {
+            myColor,
+            myBgColor,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

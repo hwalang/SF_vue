@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Emp 관리 - axios</h1>
+      <hr />
+
+      <table>
+        <thead>
+          <tr>
+            <td>employeeId</td>
+            <td>firstName</td>
+            <td>lastName</td>
+            <td>email</td>
+            <td>hireDate</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(emp, index) in empList" v-bind:key="index" @click="detailEmp(emp.employeeId)">
+            <td>{{emp.employeeId}}</td>
+            <td>{{emp.firstName}}</td>
+            <td>{{emp.lastName}}</td>
+            <td>{{emp.email}}</td>
+            <td>{{emp.hireDate}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+
+      <form>
+        <table>
+          <tbody>
+            <tr>
+              <td>firstName</td>
+              <td><input type="text" name="firstName" id="inputFirstName" v-model="emp.firstName" /></td>
+            </tr>
+            <tr>
+              <td>lastName</td>
+              <td><input type="text" name="lastName" id="inputLastName" v-model="emp.lastName" /></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><input type="text" name="email" id="inputEmail" v-model="emp.email" /></td>
+            </tr>
+            <tr>
+              <td>hireDate</td>
+              <td><input type="text" name="hireDate" id="inputHireDate" v-model="emp.hireDate" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+
+      <div style="border: 1px; margin: auto; text-align: center">
+        <button @click="insertEmp">등록</button>
+        <button @click="updateEmp">수정</button>
+        <button @click="deleteEmp">삭제</button>
+        <button @click="clearEmp">초기화</button>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const emp = ref({}); // 상세
+          const empList = ref([]); // 목록
+
+          const clearEmp = () => {
+            emp.value = {
+              employeeId: 0,
+              firstName: "",
+              lastName: "",
+              email: "",
+              hireDate: "",
+            };
+          };
+
+          const listEmp = async () => {
+            try {
+              let { data } = await axios.get("http://localhost:8080/axios/emps"); // 여기서 js 객체
+              // console.log(data);
+              empList.value = data;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const detailEmp = async (employeeId) => {
+            try {
+              let { data } = await axios.get("http://localhost:8080/axios/emps/" + employeeId);
+              emp.value = data;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const insertEmp = async () => {
+            // http://192.168.203.108:8080 111 108
+            try {
+              let { data } = await axios.post("http://localhost:8080/axios/emps", emp.value);
+              console.log(data);
+              listEmp();
+              clearEmp();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const updateEmp = async () => {
+            try {
+              let { data } = await axios.put("http://localhost:8080/axios/emps/" + emp.value.employeeId, emp.value);
+              console.log(data);
+              listEmp();
+              clearEmp();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const deleteEmp = async () => {
+            try {
+              let { data } = await axios.delete("http://localhost:8080/axios/emps/" + emp.value.employeeId);
+              console.log(data);
+              listEmp();
+              clearEmp();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          listEmp(); // 데이터 가져오기
+
+          return {
+            emp,
+            empList,
+            clearEmp,
+            detailEmp,
+            insertEmp,
+            updateEmp,
+            deleteEmp,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

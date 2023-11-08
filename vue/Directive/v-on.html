@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- vue 밖의 변수에 접근: error -->
+      <button v-on:click="alter(OuterCount + 1)">OuterCount 증가</button>
+      <!-- {{}}가 없으면 적용되지 않는 버그가 있다. -->
+      <button v-on:click="increaseCount()">count 증가</button>
+      <button @:click="increaseCount()">count 증가</button>
+      {{count}}
+      <br />
+
+      <button @:click="sayCount()">count 증가</button>
+      <button @:click="sayCount(5)">count 증가</button>
+      <button @:click="sayCount(count)">count 증가</button>
+      {{countMessage}}
+      <hr />
+      <div v-on:mouseover="mouseMessage = '마우스Over'" v-on:mouseout="mouseMessage = '마우스 out'">메세지는 {{mouseMessage}}</div>
+      <hr />
+
+      <input v-on:keyup="showKey" type="text" placeholder="키 입력" />
+      <input v-on:keydown="showKey" type="text" placeholder="키 입력" />
+
+      <hr />
+      <!-- enter 키를 인식 -->
+      <input v-on:keydown.enter="enterKey" type="text" placeholder="enter" />
+      <input v-on:keyup="multiKey" type="text" placeholder="ctrl + c/v 입력" />
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      var OuterCount = 0;
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const count = ref(0);
+          const increaseCount = () => (count.value += 1);
+          const countMessage = ref(0);
+          const sayCount = (count) => (countMessage.value = `${count} 번 클릭`);
+
+          const mouseMessage = ref("");
+
+          const showKey = (e) => {
+            console.log(`${e.key} : ${e.keyCode}`);
+            alert(`${e.key} : ${e.keyCode}`);
+          };
+          const enterKey = (e) => {
+            console.log(`${e.key} : ${e.keyCode}`);
+            alert("enter 키 입력");
+          };
+          const multiKey = (e) => {
+            e.preventDefault();
+
+            console.log(`${e.key} : ${e.keyCode}`);
+            if (e.ctrlKey && e.keyCode == 67) {
+              // ctrl + c
+              console.log("ctrl + c");
+            } else if (e.ctrlKey && e.keyCode == 86) {
+              // ctrl + v
+              console.log("ctrl + v");
+            } else if (e.altKey && e.keyCode == 116) {
+              // alt + f5
+              console.log("alt + f5");
+            }
+          };
+
+          return {
+            count,
+            increaseCount,
+            countMessage,
+            sayCount,
+            mouseMessage,
+            showKey,
+            enterKey,
+            multiKey,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

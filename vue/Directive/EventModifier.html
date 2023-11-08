@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- js 이용해서 default action 처리 -->
+      <form target="_blank" action="https://naver.com">
+        <input v-model="inputText1" type="text" />
+        <button type="submit" v-on:click="callSubmit">전송</button>
+      </form>
+
+      <!-- modifier: prevent -->
+      <form id="form2" @submit.prevent="callSubmit2" target="_blank" action="https://naver.com">
+        <input v-model="inputText2" type="text" />
+        <button type="submit">전송</button>
+      </form>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const inputText1 = ref("");
+          const inputText2 = ref("");
+
+          const callSubmit = (e) => {
+            if (inputText1.value == "") {
+              e.preventDefault(); // submit를 누르면 action을 수행하지 않는다.
+              console.log("empty");
+            }
+          };
+          const callSubmit2 = (e) => {
+            if (inputText2.value != "") {
+              console.log("not empty");
+              // prevent로 default action을 막았기에 직접 보낸다.
+              document.querySelector("#form2").submit();
+            }
+          };
+
+          return {
+            inputText1,
+            inputText2,
+            callSubmit,
+            callSubmit2,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

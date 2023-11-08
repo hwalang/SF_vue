@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @mouseover="alert1">알림1</button>
+        <button @click="alert2">알림2</button>
+        <button @click="alert3">알림3</button>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        let {createApp, ref} = Vue;
+        createApp({
+            setup() {
+                const alert1 = function() {
+                    alert(1);
+                }
+                const alert2 = function() {
+                    alert(2);
+                }
+                const alert3 = function() {
+                    alert(3);
+                }
+
+                return {
+                    alert1, alert2, alert3
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>

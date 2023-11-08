@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>{{text}}</div>
+      <div>{{reversedText}}</div>
+      <div>{{reversedText}}</div>
+      <div>{{reversedText}}</div>
+      <div>{{reversedTextMethod()}}</div>
+      <div>{{reversedTextMethod()}}</div>
+      <div>{{reversedTextMethod()}}</div>
+      <button @click="changeText">변경</button>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref, computed } = Vue;
+
+      createApp({
+        setup() {
+          const text = ref("안녕하세요, Vue!");
+          const reversedText = computed(() => {
+            console.log("reversedText(), 몇 번 호출?");
+            return text.value.split("").reverse().join(""); // return 필수
+          });
+          const changeText = () => (text.value = "Hello, Vue!");
+
+          // computed 함수
+          const reversedTextMethod = () => {
+            console.log("reversedTextMethod(), 몇 번 호출?");
+            return text.value.split("").reverse().join("");
+          };
+
+          return {
+            text,
+            reversedText,
+            changeText,
+            reversedTextMethod,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

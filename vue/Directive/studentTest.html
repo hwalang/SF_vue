@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Student 관리</h1>
+      <hr />
+
+      <table>
+        <thead>
+          <tr>
+            <td>StudentID</td>
+            <td>StudentNm</td>
+            <td>Email</td>
+            <td>Phone</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(student, index) in studentList" v-bind:key="index" @click="detailStudent(student.studentId)">
+            <td>{{student.studentId}}</td>
+            <td>{{student.studentNm}}</td>
+            <td>{{student.email}}</td>
+            <td>{{student.phone}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+
+      <form>
+        <table>
+          <tbody>
+            <tr>
+              <td>StudentNm</td>
+              <td><input type="text" name="studentNm" id="inputStudentNm" v-model="student.studentNm" /></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><input type="text" name="email" id="inputEmail" v-model="student.email" /></td>
+            </tr>
+            <tr>
+              <td>Phone</td>
+              <td><input type="text" name="phone" id="inputPhone" v-model="student.phone" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+
+      <div style="border: 1px; margin: auto; text-align: center">
+        <button @click="insertStudent">등록</button>
+        <button @click="updateStudent">수정</button>
+        <button @click="deleteStudent">삭제</button>
+        <button @click="clearStudent">초기화</button>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const student = ref({}); // 상세
+          const studentList = ref([]); // 목록
+
+          const clearStudent = () => {
+            student.value = {
+              studentId: 0,
+              studentNm: "",
+              email: "",
+              phone: "",
+            };
+          };
+
+          const listStudent = async () => {
+            try {
+              // CORS 에러: 다른 서버에 접속하기 위해서 spring에서 header 허용 -> studentController
+              let response = await fetch("http://localhost:8080/students");
+              let data = await response.json();
+              studentList.value = data;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const detailStudent = async (studentId) => {
+            try {
+              let response = await fetch("http://localhost:8080/students/" + studentId);
+              let data = await response.json();
+              console.log(data);
+              student.value = data;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const insertStudent = async () => {
+            let urlParams = new URLSearchParams(student.value);
+
+            let fetchOptions = {
+              method: "POST",
+              body: urlParams,
+            };
+
+            try {
+              let response = await fetch("http://localhost:8080/students", fetchOptions);
+              let data = await response.json();
+              console.log(data);
+              listStudent();
+              clearStudent();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const updateStudent = async () => {
+            let urlParams = new URLSearchParams(student.value);
+
+            let fetchOptions = {
+              method: "PUT",
+              body: urlParams,
+            };
+
+            try {
+              let response = await fetch("http://localhost:8080/students/" + student.value.studentId, fetchOptions);
+              let data = await response.json();
+              console.log(data);
+              listStudent();
+              clearStudent();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          const deleteStudent = async () => {
+            let fetchOptions = {
+              method: "DELETE",
+            };
+
+            try {
+              let response = await fetch("http://localhost:8080/students/" + student.value.studentId, fetchOptions);
+              let data = await response.json();
+              console.log(data);
+              listStudent();
+              clearStudent();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+
+          listStudent(); // 데이터 가져오기
+
+          return {
+            student,
+            studentList,
+            clearStudent,
+            detailStudent,
+            insertStudent,
+            updateStudent,
+            deleteStudent,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

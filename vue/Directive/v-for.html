@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <!-- arrayItems가 const인 경우 index를 사용: 데이터가 변하면 index를 사용하지 않는다. -->
+        <li v-for="(item, index) in arrayItems" v-bind:key="index">{{ item }}</li>
+      </ul>
+      <hr />
+      <ul>
+        <li v-for="(obj, index) in objectArrayItems" v-bind:key="index">{{obj.name}} {{obj.price}}</li>
+      </ul>
+      <ul>
+        <li v-for="(obj, index) in filteredItems" v-bind:key="index">{{obj.name}} {{obj.price}}</li>
+      </ul>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      let studyList = ["Java", "DB", "Spring", "Vue"];
+      let objectList = [
+        { name: "Java", price: 20000 },
+        { name: "DB", price: 30000 },
+        { name: "Spring", price: 40000 },
+        { name: "Vue", price: 50000 },
+      ];
+      const { createApp, ref, reactive, computed } = Vue;
+
+      createApp({
+        setup() {
+          const arrayItems = ref(studyList);
+          const objectArrayItems = reactive(objectList);
+
+          // objects에서 랜더링할 대상을 추출한다.
+          const filteredItems = computed(() => objectArrayItems.filter((el) => el.price > 30000));
+
+          return {
+            arrayItems,
+            objectArrayItems,
+            filteredItems,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

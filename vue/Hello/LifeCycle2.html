@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{text}}
+        <button @click="changeText">변경</button>
+        <div id="abc"></div>
+    </div>
+
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        console.log(Vue);
+        const { createApp, ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated } = Vue;
+        createApp({
+            setup() {
+                console.log("setup", document.querySelector("#abc"));
+
+                const text = ref('Hello Vue');
+                const changeText = function() {
+                    text.value = "World!";
+                }
+                
+                const fetchData = function() {
+                    console.log("초기 데이터 가져오기");
+                }
+                fetchData();
+
+                // mount
+                onBeforeMount(() => {
+                    console.log("onBeforeMount", document.querySelector("#abc"));
+                });
+                onMounted(() => {
+                    // console.log("onMounted");
+                    console.log("onMounted", document.querySelector("#abc"));
+                });
+
+                // update
+                onBeforeUpdate(() => {
+                    console.log("onBeforeUpdate", document.querySelector("#abc"));
+                });
+                onUpdated(() => {
+                    console.log("onUpdated", document.querySelector("#abc"));
+                });
+
+                return {
+                    text, changeText
+                }
+            }
+        }).mount("#app");
+
+    </script>
+</body>
+</html>

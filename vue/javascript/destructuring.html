@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        {
+            // 일반적인 배열의 항목(value)을 개별 변수에 담는 과정
+            let numbers = [0, 1, 2, 3, 4];
+            let a = numbers[0];
+            let b = numbers[1];
+            let c = numbers[2];
+            let d = numbers[3];
+            let e = numbers[4];
+
+            console.log(a, b, c, d, e);
+        }
+
+        // destructuring
+        {
+            let numbers = [0, 1, 2, 3, 4];
+            let a, b, c, d, e;
+            [a, b, c, d, e] = numbers;
+            console.log(a, b, c, d, e);
+        }
+    
+        {
+            let numbers = [0, 1, 2, 3, 4];
+            let [a, b, c, d, e] = numbers;
+            console.log(a, b, c, d, e);
+        }
+        {
+            let numbers = [0, 1, 2, 3, 4];
+            let [a, b, ...c] = numbers;
+            console.log(a, b, c);
+        }
+
+        {
+            let text = 'Hello';
+            let [a, b, c, ...d] = text;
+            console.log(a, b, c, d);
+        }
+
+        {
+            let a, b, c;
+            [a=3, b=5, c];
+            console.log(a, b, c);
+        }
+
+        {
+            let a = 'Hello';
+            let b = 'World';
+            
+            [a, b] = [b, a];
+            console.log(a, b);
+        }
+
+        {
+            let obj = {
+                name: '홍길동',
+                phone: '010-1111-1111',
+                age: 20
+            }
+
+            let {name, age} = obj;
+            console.log(name, age);
+
+            let {name: c, age: d} = obj;    // name -> c, age -> d 로 가명
+            console.log(c, d);
+        }
+
+
+        {
+            getJson();
+        }
+
+        async function getJson() {
+            let response = await fetch('./fetchResult.json');
+            let {active, members, ...data} = await response.json();
+            console.log(active);
+            console.log(members);
+            console.log(data);
+        }
+    </script>
+</body>
+</html>

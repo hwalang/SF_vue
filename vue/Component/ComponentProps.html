@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- props -->
+      <child-component my-data="바로 쓰기"></child-component>
+      <child-component v-bind:parent-data="message"></child-component>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref, defineComponent } = Vue;
+
+      const ChildComponent = defineComponent({
+        template: `<p>{{myValue}} : {{myData}} : {{parentData}}</p>`,
+        // props: {
+        //   myData: String,
+        //   parentData: String,
+        // },
+        props: ["myData", "parentData"],
+
+        // tag에서 myData가 setup()의 props로 넘어온다.
+        setup(props) {
+          const myValue = ref(200);
+
+          return {
+            myValue,
+          };
+        },
+      });
+
+      const app = createApp({
+        components: {
+          ChildComponent,
+        },
+        setup() {
+          const message = ref("부모의 데이터");
+
+          return {
+            message,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

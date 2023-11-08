@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 글자로 사용 -->
+      <div v-text="content"></div>
+      <div>{{content}}</div>
+
+      <!-- element로 인식 -->
+      <div v-html="content"></div>
+
+      <!-- rendering을 1번만 한다-->
+      <div v-once>{{content}}</div>
+
+      <button @click="change">변경</button>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+      let css = `<span style="background-color: lightgrey">회색</span>`;
+
+      createApp({
+        setup() {
+          const content = ref(css);
+          const change = () => (content.value = `<span style="background-color: green">녹색</span>`);
+
+          return {
+            content,
+            change,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

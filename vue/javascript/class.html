@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        class MyClass {
+            constructor(obj) {      // 일반적으로 생성자에 객체를 전달한다.
+                this.id = obj.id;
+                this.name = obj.name;
+                this.email = obj.email;
+            }
+            // 생성자로 인해서 멤버 변수가 ?개에서 3개로 확정됐다.
+            
+            aboutMe() {
+                let aboutMeText = `${this.id} ${this.name} ${this.email}`;
+                console.log(aboutMeText);
+                if (this.ui == undefined) {
+                    console.log("ui is undefined!");
+                } else {
+                    this.ui.innerText = aboutMeText;
+                }
+            }
+
+            // mount() 이후에 aboutMe()를 호출하면 this.ui가 존재한다.
+            mount(ui) {
+                this.ui = document.querySelector(ui);   // setter 역할 -> 멤버 변수가 추가된다.
+                return this;
+            }
+        }
+
+        new MyClass({
+            id: 1,
+            name: '홍길동',
+            email: 'hong@n.com'
+        }).mount("#app").aboutMe();
+
+    </script>
+</body>
+</html>

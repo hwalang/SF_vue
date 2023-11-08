@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{aaa()}}
+    </div>
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        console.log(Vue);
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+                const text1 = ref('Hello Vue');
+
+                const bbb = () => {
+                    console.log("bbb호출");
+                    return "bbb";
+                }
+
+                return {
+                    text1,
+                    bbb,
+                    aaa
+                }
+            }
+        }).mount("#app");
+
+        function aaa() {
+            console.log("aaa");
+            return "aaa";
+        }
+    </script>
+</body>
+</html>

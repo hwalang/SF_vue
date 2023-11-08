@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="someId">{{textId}}</div>
+      <div v-bind:id="bindId">{{textId}}</div>
+      <a v-bind:href="bindUrl">{{textUrl}}</a>
+
+      <!-- custom attribute -->
+      <div v-bind:data-boardId="boardId">{{boardId}}</div>
+
+      <!-- input -->
+      <input type="text" :value="textValue" />
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const textId = ref("v-bind ID");
+          const bindId = ref("12345");
+          const bindUrl = ref("https://google.com");
+          const textUrl = ref("Google");
+          const boardId = ref("10000");
+          const textValue = ref("입력하세요.");
+
+          return {
+            textId,
+            bindId,
+            bindUrl,
+            textUrl,
+            boardId,
+            textValue,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

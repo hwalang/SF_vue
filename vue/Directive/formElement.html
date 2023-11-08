@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h4>Input Text</h4>
+      <input type="text" v-model="inputText" />{{inputText}}
+
+      <h4>Textarea</h4>
+      <textarea v-model="textareaText"></textarea>{{textareaText}}
+
+      <h4>Checkbox - single</h4>
+      <input type="checkbox" name="" id="checkbox" v-model="checkboxValue" />{{checkboxValue}}
+
+      <h4>Checkbox - multiple</h4>
+      <input type="checkbox" name="" id="java" value="J" v-model="checkboxValueList" />
+      <label for="java">Java</label>
+      <input type="checkbox" name="" id="spring" value="S" v-model="checkboxValueList" />
+      <label for="spring">spring</label>
+      <input type="checkbox" name="" id="vue" value="V" v-model="checkboxValueList" />
+      <label for="vue">vue</label>
+      {{checkboxValueList}}
+
+      <h4>Radio</h4>
+      <input type="radio" name="" id="football" value="F" v-model="radioValue" />
+      <label for="football">축구</label>
+      <input type="radio" name="" id="baseball" value="B" v-model="radioValue" />
+      <label for="baseball">야구</label>
+      {{radioValue}}
+
+      <h4>Select - Single</h4>
+      <select v-model="selectValue">
+        <option value="C">Camping</option>
+        <option value="D">Drinking</option>
+        <option value="S">Singing</option>
+      </select>
+      {{selectValue}}
+
+      <h4>Select - multiple</h4>
+      <select v-model="selectValueList" multiple>
+        <option value="C">Camping</option>
+        <option value="D">Drinking</option>
+        <option value="S">Singing</option>
+      </select>
+      {{selectValueList}}
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const inputText = ref("ssafy");
+          const textareaText = ref("textarea 내용");
+          const checkboxValue = ref(false);
+          const checkboxValueList = ref(["S", "V"]); // 선택된 item
+          const radioValue = ref("F");
+          const selectValue = ref("D");
+          const selectValueList = ref(["D", "S"]);
+
+          return {
+            inputText,
+            textareaText,
+            checkboxValue,
+            checkboxValueList,
+            radioValue,
+            selectValue,
+            selectValueList,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

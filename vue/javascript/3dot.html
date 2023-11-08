@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // ... : 3 dot operator
+        // 1. Rest Operator
+        // = 기준으로 왼쪽에 있는 경우
+        // 맨 끝에 위치한다. object, list를 복사할 때 사용한다.
+        {
+            // 1.1. 같은 객체를 가리킨다.
+            let obj = {a:1, b:2, c:3}
+            let obj2 = obj;     
+            console.log(obj2);
+            obj.b = 4;
+            console.log(obj2);
+        }
+        {
+            // 1.2. object 복사
+            let obj = {a:1, b:2, c:3}
+            let {...obj2} = obj;        // {a:1, b:2, c:3} 객체가 하나 더 생성
+            console.log(obj2);
+            obj.b = 4;
+            console.log(obj2);
+        }
+        {
+            // 1.3. Rest 의미
+            let obj = {a:1, b:2, c:3, d:"4"}
+            let {a, c, ...obj2} = obj;  // 남는 property를 가진 객체를 생성하여 obj2에 저장
+            let {x, ...obj3} = obj;
+            console.log(a, c, obj2);
+            console.log(a, x, obj3);    // x: undefined
+        }
+        {
+            // 1.4. list에서 사용 - element를 property처럼 다룬다.
+            let arr = [1, 2, 3, 4, 5];
+            let [c, d, ...arr2] = arr;
+            console.log(c, d, arr2);
+        }
+        console.log("---------------------------------")
+
+        // 2. Spread Operator
+        // =을 기준으로 오른쪽에 있는 경우
+        {
+            // 2.1. property가 추가되거나 덮어쓴다.
+            let s1 = { name:'홍길동', phone:'010-1111-1111', age:20}
+            let s2 = { phone:'010-2222-2222', age:30}
+            let s3 = { phone:'010-3333-3333'}
+
+            let s4 = {...s1};               // duplicate
+            let s5 = {...s1, ...s3};        // 복사 + 덮어쓰기: 홍길동, 010-3333-3333, 20 출력
+            let s6 = {...s3, ...s2};        // 앞 객체와 뒤 객체의 property가 같으면 덮어쓴다.
+                                            // 다르면 새로 쓴다.
+
+            console.log(s4);
+            console.log(s5);
+            console.log(s6);
+        }
+        {
+            // 2.2. 배열은 concat
+            let arr = [1, 2, 3, 4, 5];
+            let arr2 = [3, 4, 5, 6, 7];
+
+            let = arr3 = [...arr, ...arr2];     // arr + arr2로 할 수 없다.
+            console.log(arr3);
+        }
+
+
+    </script>
+</body>
+</html>

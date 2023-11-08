@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 복잡한 html code가 있음! -->
+      <global-component></global-component>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue;
+
+      const app = createApp({});
+
+      // app에 component를 추가
+      // tag를 이용해서 component를 사용할 수 있다.
+      app.component(
+        "GlobalComponent", // Component 이름
+        {
+          template: "<div>Global Component 1</div><div>Global Component 2</div>",
+        } // Component 객체를 위한 모양, 기능 등
+      );
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

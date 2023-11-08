@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- input tag에 입력한 값을 vue 변수에 반영 -->
+      <input type="text" v-bind:value="inputTest1" v-on:input="updateInput" />
+      <input type="text" v-model.lazy="inputTest2" />
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp, ref } = Vue;
+
+      createApp({
+        setup() {
+          const inputTest1 = ref("12345");
+          const inputTest2 = ref("aaaa");
+          const updateInput = (e) => (inputTest1.value = e.target.value);
+
+          return {
+            inputTest1,
+            inputTest2,
+            updateInput,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

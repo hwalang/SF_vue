@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{text1}}
+        <br>
+        {{text2.slice(0, 4)}} {{text2.slice(0, 4)}} {{text2.slice(0, 4)}}
+        <br>
+        {{text2Prefix}} {{text2Prefix}} {{text2Prefix}}
+        <br>
+        {{text3 == "A" ? "A 입니다." : "A가 아닙니다."}}
+
+    </div>
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        console.log(Vue);
+        const { createApp, ref, computed } = Vue;
+        createApp({
+            setup() {
+                const text1 = ref('Hello Vue');
+                const text2 = ref('20231102');
+                const text3 = ref('Hello Vue');
+
+                const text2Prefix = computed( () => {
+                    console.log("text2Prefix");
+                    return text2.value.slice(0, 4);
+                });
+                return {
+                    text1, text2, text3, text2Prefix
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
