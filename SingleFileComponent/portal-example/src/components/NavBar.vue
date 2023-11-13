@@ -25,7 +25,14 @@
             <router-link to="/blog" class="nav-link">Blog</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/mail/:from/:content" class="nav-link">Mail</router-link>
+            <!-- <router-link to="/mail/:from/:content" class="nav-link">Mail</router-link> -->
+
+            <!-- Named Route -->
+            <router-link
+              :to="{ name: 'Mail', params: { from: '홍길동', content: '안녕하세요' } }"
+              class="nav-link"
+              >Mail</router-link
+            >
           </li>
           <li class="nav-item">
             <router-link to="/tellme" class="nav-link">TellMe</router-link>
@@ -56,7 +63,8 @@
             <a class="nav-link" href="#">{{ userData.userName }}Logout</a>
           </li>
           <li class="nav-item" v-show="!isLogin">
-            <a class="nav-link" href="#">Login</a>
+            <!-- <a class="nav-link" href="#">Login</a> -->
+            <router-link to="/login" class="nav-link">Login</router-link>
           </li>
         </ul>
       </div>
@@ -66,6 +74,8 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+// vite 가 static content에 hard-coding 방식으로 처리해준다.
+import notLoginUserProfileImageUrl from '/src/assets/noProfile.png'
 
 const searchWord = ref('')
 const search = (e) => {
@@ -79,6 +89,6 @@ const search = (e) => {
 const isLogin = ref(false)
 const userData = reactive({
   userName: '',
-  userProfileImageUrl: '/src/assets/noProfile.png'
+  userProfileImageUrl: notLoginUserProfileImageUrl
 })
 </script>

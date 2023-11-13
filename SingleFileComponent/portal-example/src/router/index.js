@@ -5,6 +5,7 @@ import MainPage from '@/components/MainPage.vue'
 import CafePage from '@/components/CafePage.vue'
 import BlogPage from '@/components/BlogPage.vue'
 import MailPage from '@/components/MailPage.vue'
+import LoginPage from '@/components/LoginPage.vue'
 
 import TellMe from '@/components/TellMe.vue'
 
@@ -21,7 +22,16 @@ const router = createRouter({
     },
     {
       path: '/blog',
-      component: BlogPage
+      component: BlogPage,
+      beforeEnter: (to, from, next) => {
+        console.log('/blog - beforeEnter');
+        let userRole = '';
+        if (userRole != '') {
+          return next();
+        } else {
+          next('/login');
+        }
+      }
     },
     // path: '/mail',    // name + query로 보낼 때
     {
@@ -33,8 +43,38 @@ const router = createRouter({
     {
       path: '/tellme',
       component : TellMe
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component : LoginPage
     }
   ]
 });
 
+// Global NavigationGuard: without next()
+// router.beforeEach((to, from) => {
+//   let isLogin = false;
+
+//   if (isLogin || to.path == '/' || to.name == 'Login') {
+//     return true;    // 통과
+//   } else {
+//     console.log('router - beforeEach - else')
+//     // 단순 이동 거부
+//     // return false;
+//     return { name: 'Login' };
+//   }
+// })
+// router.beforeEach((to, from, next) => {
+//   let isLogin = false;
+
+//   if (isLogin || to.path == '/' || to.name == 'Login') {
+//     next();
+//   } else {
+//     console.log('router - beforeEach - else')
+//     // 단순 이동 거부
+//     next('/login');
+//     next({ name: 'Login', })
+//   }
+// })
 export default router;
