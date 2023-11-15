@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
+    <div class="container">
       <a class="navbar-brand" href="#">Navbar</a>
       <button
         class="navbar-toggler"
@@ -21,32 +21,59 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
           </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0 float-end">
+          <li class="nav-item pt-2">
+            <img
+              v-bind:src="authStore.userProfileImageUrl"
+              alt=""
+              style="width: 24px; height: 24px; border-radius: 50%"
+            />
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+          <li class="nav-item" v-show="!authStore.isLogin">
+            <!-- <a class="nav-link" href="#">Login</a> -->
+            <router-link to="/login" class="nav-link">Login</router-link>
+          </li>
+          <li class="nav-item" v-show="authStore.isLogin">
+            <a class="nav-link" href="#" @click="logout">Logout</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
 </template>
+
+<script setup>
+import http from '@/common/axios.js'
+import notLoginUserProfileImageUrl from '/src/assets/noProfile.png'
+import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const { authStore, setLogin } = useAuthStore()
+
+const logout = async () => {
+  try {
+    let { data } = await http.get('/logout')
+    console.log(data)
+
+    if (data.result == 'success') {
+      // session storage 삭제
+      sessionStorage.removeItem('isLogin')
+      sessionStorage.removeItem('userName')
+      sessionStorage.removeItem('userProfileImageUrl')
+
+      // authStore 변경
+      setLogin({
+        isLogin: false,
+        userName: '',
+        userProfileImageUrl: notLoginUserProfileImageUrl
+      })
+
+      // page 이동 -> login
+      router.push('/login')
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+</script>
