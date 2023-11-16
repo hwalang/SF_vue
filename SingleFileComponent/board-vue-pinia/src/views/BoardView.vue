@@ -34,11 +34,13 @@
     <update-modal></update-modal>
     <detail-modal></detail-modal>
 
-    <button class="btn btn-sm btn-primary" id="btnBoardInsertUI">글쓰기</button>
+    <button class="btn btn-sm btn-primary" @click="showInsertModal">글쓰기</button>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+
 // component
 import PaginationUI from '@/components/PaginationUI.vue'
 import InsertModal from '@/components/modals/InsertModal.vue'
@@ -47,12 +49,27 @@ import DetailModal from '@/components/modals/DetailModal.vue'
 
 //common
 import util from '@/common/util.js'
+// boootstrap 객체 생성
+import { Modal } from 'bootstrap'
 
 import { useBoardStore } from '@/stores/boardStore'
 // import { useRouter } from 'vue-router'
 const { boardStore, boardList } = useBoardStore()
 // const router = useRouter()
 
+let insertModal = null
+let updateModal = null
+let detailModal = null
+
+// mount 단계에서 document를 인식할 수 있다.
+// 지금은 create 단계
+onMounted(() => {
+  insertModal = new Modal(document.getElementById('insertModal'))
+  updateModal = new Modal(document.getElementById('updateModal'))
+  detailModal = new Modal(document.getElementById('detailModal'))
+})
+
+const showInsertModal = () => insertModal.show()
 // 이번에는 store에서 server에 다녀와서 데이터를 가져온다.
 boardList()
 </script>

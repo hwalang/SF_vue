@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" id="boardUpdateModal">
+  <div class="modal fade" id="updateModal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
