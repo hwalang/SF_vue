@@ -1,7 +1,9 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-light">
+  <!-- 모두 store 를 사용하도록 변경 -->
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
     <div class="container">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <router-link to="/" class="navbar-brand">NoStraight</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,65 +17,38 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+          <li class="nav-item float-end">
+            <!-- login 성공하면 보여줌 -->
+            <router-link v-show="authStore.isLogin" to="/board" class="nav-link">Board</router-link>
           </li>
         </ul>
-        <ul class="navbar-nav mb-2 mb-lg-0 float-end">
-          <li class="nav-item pt-2">
+        <ul class="navbar-nav ms-5">
+          <li class="nav-item">
+            <!-- nav-item 이 height 가 40 고정 class mt-2 넣어서 높이 조정하자 -->
             <img
               v-bind:src="authStore.userProfileImageUrl"
-              alt=""
+              alt="Logo"
+              class="mt-2"
               style="width: 24px; height: 24px; border-radius: 50%"
             />
           </li>
+          <li class="nav-item" v-show="authStore.isLogin">
+            <a class="nav-link" href="#" @click="logout">{{ authStore.userName }} Logout</a>
+          </li>
           <li class="nav-item" v-show="!authStore.isLogin">
-            <!-- <a class="nav-link" href="#">Login</a> -->
             <router-link to="/login" class="nav-link">Login</router-link>
           </li>
-          <li class="nav-item" v-show="authStore.isLogin">
-            <a class="nav-link" href="#" @click="logout">Logout</a>
-          </li>
         </ul>
+        <!-- <a v-show="authStore.isLogin" class="navbar-brand" href="#">
+               <img v-bind:src="authStore.userProfileImageUrl" alt="" width="34" height="30" style="border-radius: 50%" class="d-inline-block align-text-top" />
+               {{ authStore.userName }}
+            </a> -->
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import http from '@/common/axios.js'
-import notLoginUserProfileImageUrl from '/src/assets/noProfile.png'
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'vue-router'
-const router = useRouter()
-const { authStore, setLogin } = useAuthStore()
-
-const logout = async () => {
-  try {
-    let { data } = await http.get('/logout')
-    console.log(data)
-
-    if (data.result == 'success') {
-      // session storage 삭제
-      sessionStorage.removeItem('isLogin')
-      sessionStorage.removeItem('userName')
-      sessionStorage.removeItem('userProfileImageUrl')
-
-      // authStore 변경
-      setLogin({
-        isLogin: false,
-        userName: '',
-        userProfileImageUrl: notLoginUserProfileImageUrl
-      })
-
-      // page 이동 -> login
-      router.push('/login')
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
+const { authStore, logout } = useAuthStore()
 </script>

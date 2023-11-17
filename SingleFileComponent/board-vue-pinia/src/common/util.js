@@ -1,5 +1,3 @@
-
-// BoradView -> list: 렌더링할 때 json -> gson으로 변경
 export default {
   makeDateStr : function(date, type){
     let tempMonth = (date.month < 10) ? `0${date.month}` : date.month

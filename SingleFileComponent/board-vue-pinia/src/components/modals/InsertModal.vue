@@ -1,6 +1,6 @@
 <template>
-  <div class="modal fade" id="insertModal">
-    <div class="modal-dialog modal-lg">
+  <div class="modal" tabindex="-1" id="insertModal">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">글 쓰기</h5>
@@ -13,9 +13,10 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <input type="text" v-model="title" class="form-control" placeholder="제목" />
+            <input v-model="title" type="text" class="form-control" placeholder="제목" />
           </div>
           <div class="mb-3">
+            <!-- <div id=divEditorInsert></div> -->
             <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
           </div>
           <div class="form-check mb-3">
@@ -35,11 +36,13 @@
               <img v-for="(file, index) in fileList" v-bind:src="file" v-bind:key="index" />
             </div>
           </div>
+        </div>
+        <div class="modal-footer">
           <button
-            class="btn btn-sm btn-primary btn-outline float-end"
-            data-bs-dismiss="modal"
-            type="button"
             @click="boardInsert"
+            class="btn btn-sm btn-primary btn-outline"
+            data-dismiss="modal"
+            type="button"
           >
             등록
           </button>
@@ -50,10 +53,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import http from '@/common/axios.js'
+
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import VueAlertify from 'vue-alertify'
+
+import { useAuthStore } from '@/stores/authStore'
+const { authStore } = useAuthStore()
 
 const ckeditor = CKEditor.component
 const editor = ClassicEditor
@@ -61,55 +69,89 @@ const editorData = ref('')
 const editorConfig = {}
 
 const title = ref('')
-const attachFile = ref(false) // checkbox = true/false
+const attachFile = ref(false)
 const fileList = ref([])
+const inputFile = ref('')
 
-const changeFile = (fileEvent) => {
-  fileList.value = [] // thumbnail image 초기화
+onMounted(() => {
+  // console.log( document.querySelector("#inputFileUploadInsert") )
+  initUI()
+})
 
-  const fileArray = Array.from(fileEvent.target.files)
-  fileArray.forEach((file) => fileList.value.push(URL.createObjectURL(file)))
+const initUI = () => {
+  title.value = ''
+  editorData.value = ''
+  attachFile.value = false
+  fileList.value = []
+  document.querySelector('#inputFileUploadInsert').value = ''
 }
 
+const changeFile = (fileEvent) => {
+  fileList.value = [] // thumbnail 초기화
+
+  const fileArray = Array.from(fileEvent.target.files)
+  fileArray.forEach((file) => {
+    fileList.value.push(URL.createObjectURL(file)) // push : array 에 항목 추가
+  })
+}
+// 굳이 actions 에 있을 필요 없다. backend async 작업이지만, 그 결과로 store 를 변경하는 내용이 없다.
 const boardInsert = async () => {
-  // 1. form-data 준비
-  let formData = new FormData() // multipart/form-data로 보낸다.
-  // backend랑 같은 형식
+  let formData = new FormData()
   formData.append('title', title.value)
   formData.append('content', editorData.value)
 
+  // file upload
   let attachFiles = document.querySelector('#inputFileUploadInsert').files
-  // 첨부파일이 있으면
+
   if (attachFiles.length > 0) {
     const fileArray = Array.from(attachFiles)
     fileArray.forEach((file) => formData.append('file', file))
   }
 
-  // 2. content-type
   let options = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }
 
   try {
     let { data } = await http.post('/boards', formData, options)
-    // timeout으로 로그아웃 상태
+
+    console.log('InsertModalVue: data : ')
+    console.log(data)
     if (data.result == 'login') {
       doLogout()
     } else {
-      // 등록 성공
+      alert('글이 등록되었습니다.')
+      closeModal()
     }
   } catch (error) {
+    console.log('InsertModalVue: error ')
     console.log(error)
   }
 }
 
-const doLogout = () => {}
+const emit = defineEmits(['call-parent-insert'])
+const closeModal = () => emit('call-parent-insert')
+
+// logout 처리 별도 method
+const doLogout = () => {
+  authStore.setLogout()
+  router.push('/login')
+}
+
+// modal 창이 뜰때 초기화
+onMounted(() => {
+  // bootstrap modal show event hook
+  // UpdateModal 이 보일 때 초기화
+  const thisModal = document.getElementById('insertModal')
+  thisModal.addEventListener('show.bs.modal', function () {
+    initUI()
+  })
+})
 </script>
 
 <style scoped>
-/* deep selector >>> -> 함수 deep() */
 .modal:deep(.ck-editor__editable) {
-  height: 400px;
+  min-height: 300px !important;
 }
 
 .modal:deep(.thumbnail-wrapper) {

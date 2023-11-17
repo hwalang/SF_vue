@@ -1,27 +1,28 @@
 <template>
-  <nav-bar></nav-bar>
+  <nav-bar />
   <router-view></router-view>
 </template>
 
+<!-- script 에 setup 이 없으면 아래와 같은 오류 발생
+  "getActivePinia()" was called but there was no active Pinia. Are you trying to use a store before calling "app.use(pinia)"? -->
 <script setup>
-import { useAuthStore } from '@/stores/authStore'
-import { RouterView } from 'vue-router'
-import NavBar from './components/NavBar.vue'
-const { setLogin } = useAuthStore()
+  import { RouterView } from 'vue-router'
+  import NavBar from "./components/NavBar.vue";
 
-// session storage에 login된 상태를 확인하면
-// session storage에 있는 값을 이용해서 authStore를 갱신
-// 페이지 이동 및 refresh 해도 login을 유지할 수 있다. -> server 껐다키면 session이 날라간다.
-let isLogin = sessionStorage.getItem('isLogin')
-if (isLogin == 'true') {
-  let userName = sessionStorage.getItem('userName')
-  let userProfileImageUrl = sessionStorage.getItem('userProfileImageUrl')
-  setLogin({
-    isLogin: true,
-    userName: userName,
-    userProfileImageUrl: userProfileImageUrl
-  })
-}
+  import { useAuthStore } from '@/stores/authStore'
+  const authStore = useAuthStore()
+
+  let isLogin = sessionStorage.getItem("isLogin");
+  // console.log(isLogin)
+  if( isLogin == "true" ){
+      let userName = sessionStorage.getItem("userName");
+      let userProfileImageUrl = sessionStorage.getItem("userProfileImageUrl");
+      authStore.setLogin({ 
+        isLogin: true,
+        userName: userName,
+        userProfileImageUrl: userProfileImageUrl 
+      });
+  }
 </script>
 
 <style scoped></style>
