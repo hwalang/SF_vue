@@ -26,7 +26,9 @@ route url 이 board 에서 / 로 변경되는 문제 발생 -->
 <script setup>
 
   import {useBoardStore} from '@/stores/boardStore'
-  const { boardStore, startPageIndex, endPageIndex, prev, next } = useBoardStore();
+  import { storeToRefs } from 'pinia'
+  const { boardStore } = useBoardStore()
+  const { startPageIndex, endPageIndex, prev, next } = storeToRefs(useBoardStore()); // destructuring 에 의한 reactive 손실 보정
 
   const emit = defineEmits(['call-parent'])
   const paginationChanged = (pageIndex) => {
